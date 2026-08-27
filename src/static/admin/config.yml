@@ -2,7 +2,8 @@ backend:
   name: github
   repo: onebytwoo/onebytwoo
   branch: main
-  base_url: https://YOUR-WORKER.workers.dev   # <-- change this (see step 5 below)
+  # No base_url needed — Netlify handles the GitHub login itself
+  # (see Step 5 in setup: Site settings > Access control > OAuth)
 
 # lets you run the admin against your own folder with no login while testing
 local_backend: true
