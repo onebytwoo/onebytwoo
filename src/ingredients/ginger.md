@@ -1,7 +1,7 @@
 ---
 title: Ginger
-image: ""
+image: /images/pngwing.com.png
 category: Fresh
-aka: "adrak"
-link: ""
+aka: adrak
+link: ''
 ---
