@@ -51,7 +51,7 @@ steps:
   - Char the onion and ginger until lightly roasted — cut side down on a flame or under a hot grill, until blackened in patches. Rinse off any loose ash.
   - Dry roast the cloves, star anise, fennel seeds, coriander seeds, peppercorns and cinnamon in a pan until fragrant. Tie them into a spice bag, or leave them loose and strain the broth later.
   - Add the chicken, charred onion and ginger, spices, water, salt, fish sauce and a little brown sugar to a pot. Simmer for about an hour — don't let it boil — skimming off any foam that rises.
-  - Remove the chicken and shred it. Strain the broth and adjust the seasoning: it will usually want more fish sauce and a little more salt.
+  - "Remove the chicken and shred it. Strain the broth and adjust the seasoning: it will usually want more fish sauce and a little more salt."
   - Cook the noodles separately, to the packet timing.
   - Assemble with noodles, shredded chicken and your toppings, then pour the hot broth over. Finish with chilli oil or sriracha if you like.
 notes:
