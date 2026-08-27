@@ -172,11 +172,13 @@ collections:
       - { name: blurb, label: Why we use it, widget: text }
       - { name: image, label: Photo, widget: image, required: false }
       - { name: url, label: Affiliate link, widget: string, required: false }
-      - { name: group, label: Section on the Kit page, widget: select,
-          options:
-            - { label: Used almost daily, value: daily }
-            - { label: Worth the drawer space, value: drawer }
-            - { label: Do not show on Kit page, value: hidden } }
+      - name: group
+        label: Section on the Kit page
+        widget: select
+        options:
+          - { label: Used almost daily, value: daily }
+          - { label: Worth the drawer space, value: drawer }
+          - { label: Do not show on Kit page, value: hidden }
       - { name: body, label: Notes, widget: markdown, required: false }
 
   # =============================================================
