@@ -1,8 +1,8 @@
 backend:
   name: github
-  repo: YOUR-GITHUB-USERNAME/onebytwoo   # <-- change this
+  repo: onebytwoo/onebytwoo
   branch: main
-  base_url: https://YOUR-WORKER.workers.dev   # <-- change this (see SETUP.md step 4)
+  base_url: https://YOUR-WORKER.workers.dev   # <-- change this (see step 5 below)
 
 # lets you run the admin against your own folder with no login while testing
 local_backend: true
