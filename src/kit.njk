@@ -19,7 +19,7 @@ permalink: /kit/
     <div class="band__head"><h2>Used almost daily</h2></div>
     {% for p in collections.products | whereGroup('daily') %}
     <div class="kit">
-      <div class="frame frame--sq{% if not p.data.image %} frame--empty{% endif %}">
+      <div class="frame frame--sq frame--fit{% if not p.data.image %} frame--empty{% endif %}">
         {% if p.data.image %}<img src="{{ p.data.image }}" alt="{{ p.data.title }}" loading="lazy">{% endif %}
       </div>
       <div><h3>{{ p.data.title }}</h3><p>{{ p.data.blurb }}</p></div>
@@ -34,7 +34,7 @@ permalink: /kit/
     <div class="band__head"><h2>Worth the drawer space</h2></div>
     {% for p in collections.products | whereGroup('drawer') %}
     <div class="kit">
-      <div class="frame frame--sq{% if not p.data.image %} frame--empty{% endif %}">
+      <div class="frame frame--sq frame--fit{% if not p.data.image %} frame--empty{% endif %}">
         {% if p.data.image %}<img src="{{ p.data.image }}" alt="{{ p.data.title }}" loading="lazy">{% endif %}
       </div>
       <div><h3>{{ p.data.title }}</h3><p>{{ p.data.blurb }}</p></div>

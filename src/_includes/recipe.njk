@@ -73,7 +73,7 @@ layout: base.njk
             <div class="ing-grid">
               {% for i in g.items %}
               <div class="ing">
-                <div class="frame frame--sq{% if not i.image %} frame--empty{% endif %}">
+                <div class="frame frame--sq frame--fit{% if not i.image %} frame--empty{% endif %}">
                   {% if i.image %}<img src="{{ i.image }}" alt="{{ i.name }}" loading="lazy" decoding="async">{% endif %}
                 </div>
                 <p>{{ i.qty }} {{ i.name }}{% if i.note %}, {{ i.note }}{% endif %}</p>
@@ -127,7 +127,7 @@ layout: base.njk
     </div>
     {% for p in gear %}
     <div class="kit">
-      <div class="frame frame--sq{% if not p.data.image %} frame--empty{% endif %}">
+      <div class="frame frame--sq frame--fit{% if not p.data.image %} frame--empty{% endif %}">
         {% if p.data.image %}<img src="{{ p.data.image }}" alt="{{ p.data.title }}" loading="lazy">{% endif %}
       </div>
       <div><h3>{{ p.data.title }}</h3><p>{{ p.data.blurb }}</p></div>

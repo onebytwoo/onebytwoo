@@ -104,9 +104,10 @@ a.frame{display:block;}
 .frame--wide{aspect-ratio:16/9;}
 .frame--tall{aspect-ratio:3/4;}
 .frame--sq{aspect-ratio:1/1;}
-/* for cut-out photos that shouldn't be cropped */
-.frame--fit{background:var(--sheet);}
-.frame--fit > img{object-fit:contain;}
+/* for cut-out photos that shouldn't be cropped — padded so the
+   full photo shows without touching the border on any side */
+.frame--fit{background:var(--sheet);padding:10%;box-sizing:border-box;}
+.frame--fit > img{width:100%;height:100%;object-fit:contain;object-position:center;}
 
 /* flat colour placeholders, used until a real photo exists */
 .ph{position:relative;aspect-ratio:4/3;background:var(--c,#D9CDB6);}
