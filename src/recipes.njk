@@ -1,0 +1,67 @@
+---
+layout: base.njk
+title: Recipes
+description: Every recipe we've written up. Search or filter by cuisine and method.
+permalink: /recipes/
+---
+<section class="hero wrap">
+  <h1>Recipes</h1>
+  <p class="sub">Everything we've written up</p>
+  <p class="tight">Search by dish or ingredient, or filter by what you're cooking in. Times are measured, not estimated.</p>
+</section>
+
+<section class="wrap" style="padding-bottom:clamp(48px,7vw,86px)">
+  <div class="search">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    <label class="skip" for="q">Search recipes</label>
+    <input id="q" type="search" placeholder="Search a dish or an ingredient…" autocomplete="off">
+  </div>
+
+  <div class="chips" role="group" aria-label="Filter recipes">
+    <button class="chip" data-filter="all" aria-pressed="true">All</button>
+    {% for f in filterchips %}<button class="chip" data-filter="{{ f.slug }}" aria-pressed="false">{{ f.label }}</button>{% endfor %}
+  </div>
+
+  <p class="kicker" id="count" style="margin-bottom:22px"></p>
+
+  <div class="grid grid--3" id="results">
+    {% for r in collections.recipes | reverse %}
+    <a class="card" href="{{ r.url }}"
+       data-tags="{{ r.data.tagList | join(' ') }}"
+       data-search="{{ r | searchBlob(collections.ingredients) }}">
+      <div class="frame frame--tall{% if not (r.data.card or r.data.hero) %} frame--empty{% endif %}">
+        {% if r.data.card or r.data.hero %}<img src="{{ r.data.card or r.data.hero }}" alt="{{ r.data.heroAlt or r.data.title }}" loading="lazy" decoding="async">{% endif %}
+      </div>
+      <span class="meta">{{ r.data.cuisine }}{% if r.data.method %} · {{ r.data.method }}{% endif %}</span>
+      <h3>{{ r.data.title }}</h3>
+      <dl class="facts"><div><dt>{{ r.data.time }}</dt><dd>Prep + cook</dd></div><div><dt>{{ r.data.serves }}</dt><dd>Serves</dd></div></dl>
+    </a>
+    {% endfor %}
+  </div>
+
+  <p id="empty" class="lede" style="display:none;margin-top:26px">Nothing matches that. Try a different word or clear the filter.</p>
+</section>
+
+<script>
+(function(){
+  var chips=document.querySelectorAll('.chip'),cards=document.querySelectorAll('#results .card'),
+      count=document.getElementById('count'),empty=document.getElementById('empty'),
+      q=document.getElementById('q'),active='all';
+  function apply(){
+    var term=q.value.trim().toLowerCase(),shown=0;
+    cards.forEach(function(c){
+      var tagOk=active==='all'||c.dataset.tags.split(' ').indexOf(active)>-1;
+      var hay=(c.dataset.search+' '+c.textContent).toLowerCase();
+      var ok=tagOk&&(!term||hay.indexOf(term)>-1);
+      c.style.display=ok?'':'none'; if(ok) shown++;
+    });
+    count.textContent=shown+(shown===1?' recipe':' recipes');
+    empty.style.display=shown?'none':'block';
+  }
+  chips.forEach(function(chip){chip.addEventListener('click',function(){
+    chips.forEach(function(c){c.setAttribute('aria-pressed','false');});
+    chip.setAttribute('aria-pressed','true'); active=chip.dataset.filter; apply();
+  });});
+  q.addEventListener('input',apply); apply();
+})();
+</script>

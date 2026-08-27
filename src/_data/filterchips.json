@@ -1,0 +1,30 @@
+[
+  {
+    "slug": "indian",
+    "label": "Indian"
+  },
+  {
+    "slug": "asian",
+    "label": "Asian"
+  },
+  {
+    "slug": "global",
+    "label": "Global"
+  },
+  {
+    "slug": "airfryer",
+    "label": "Air fryer"
+  },
+  {
+    "slug": "onepot",
+    "label": "One pot"
+  },
+  {
+    "slug": "veg",
+    "label": "Vegetarian"
+  },
+  {
+    "slug": "quick",
+    "label": "Under 30 min"
+  }
+]

@@ -1,0 +1,45 @@
+---
+layout: base.njk
+title: Our Kit
+description: The things we actually use. Small kitchen, short list.
+permalink: /kit/
+---
+<section class="hero wrap">
+  <h1>Our kit</h1>
+  <p class="sub">What's actually in our kitchen</p>
+  <p class="tight">Our kitchen is small enough that nothing earns a place unless it gets used weekly.</p>
+</section>
+
+<section class="wrap" style="padding-bottom:clamp(28px,4vw,44px)">
+  <p class="disc" style="margin:0 auto">{{ site.affiliateNote }}</p>
+</section>
+
+<section class="band band--sun">
+  <div class="wrap">
+    <div class="band__head"><h2>Used almost daily</h2></div>
+    {% for p in collections.products | whereGroup('daily') %}
+    <div class="kit">
+      <div class="frame frame--sq{% if not p.data.image %} frame--empty{% endif %}">
+        {% if p.data.image %}<img src="{{ p.data.image }}" alt="{{ p.data.title }}" loading="lazy">{% endif %}
+      </div>
+      <div><h3>{{ p.data.title }}</h3><p>{{ p.data.blurb }}</p></div>
+      {% if p.data.url %}<a class="btn" href="{{ p.data.url }}" rel="sponsored nofollow" target="_blank">View</a>{% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <div class="band__head"><h2>Worth the drawer space</h2></div>
+    {% for p in collections.products | whereGroup('drawer') %}
+    <div class="kit">
+      <div class="frame frame--sq{% if not p.data.image %} frame--empty{% endif %}">
+        {% if p.data.image %}<img src="{{ p.data.image }}" alt="{{ p.data.title }}" loading="lazy">{% endif %}
+      </div>
+      <div><h3>{{ p.data.title }}</h3><p>{{ p.data.blurb }}</p></div>
+      {% if p.data.url %}<a class="btn" href="{{ p.data.url }}" rel="sponsored nofollow" target="_blank">View</a>{% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</section>

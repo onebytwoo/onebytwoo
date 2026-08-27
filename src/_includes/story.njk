@@ -1,0 +1,23 @@
+---
+layout: base.njk
+---
+<section class="hero wrap">
+  <p class="kicker" style="margin-bottom:14px">{{ category }}{% if date %} · {{ date | readableDate }}{% endif %}{% if readTime %} · {{ readTime }}{% endif %}</p>
+  <h1 style="font-size:clamp(2.3rem,8vw,5.2rem)">{{ title }}</h1>
+  {% if subtitle %}<p class="sub">{{ subtitle }}</p>{% endif %}
+</section>
+
+{% if hero %}
+<section class="wrap" style="padding-bottom:clamp(30px,5vw,50px)">
+  <div class="frame frame--hero">
+    <img src="{{ hero }}" alt="{{ heroAlt or title }}" fetchpriority="high" decoding="async">
+  </div>
+</section>
+{% endif %}
+
+<section class="band" style="padding-top:0">
+  <div class="wrap">
+    <div class="article">{{ content | safe }}</div>
+    {% if pullquote %}<p class="pull">{{ pullquote }}</p>{% endif %}
+  </div>
+</section>

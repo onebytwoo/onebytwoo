@@ -1,0 +1,256 @@
+backend:
+  name: github
+  repo: YOUR-GITHUB-USERNAME/onebytwoo   # <-- change this
+  branch: main
+  base_url: https://YOUR-WORKER.workers.dev   # <-- change this (see SETUP.md step 4)
+
+# lets you run the admin against your own folder with no login while testing
+local_backend: true
+
+media_folder: src/images
+public_folder: /images
+
+site_url: https://onebytwoo.netlify.app
+
+collections:
+  # =============================================================
+  # RECIPES
+  # =============================================================
+  - name: recipes
+    label: Recipes
+    label_singular: Recipe
+    folder: src/recipes
+    create: true
+    slug: '{{slug}}'
+    extension: md
+    format: yaml-frontmatter
+    summary: '{{title}} — {{cuisine}}'
+    sortable_fields: [date, title]
+    view_groups:
+      - label: Cuisine
+        field: cuisine
+    fields:
+      - { name: title, label: Recipe name, widget: string }
+      - { name: subtitle, label: Subtitle, widget: string, required: false,
+          hint: Optional. Sits under the title. }
+      - { name: date, label: Date published, widget: datetime, format: 'YYYY-MM-DD',
+          date_format: 'DD MMM YYYY', time_format: false }
+
+      - { name: cuisine, label: Cuisine, widget: select,
+          options: [Indian, Vietnamese, Korean, Thai, Chinese, Mexican, Italian, Other] }
+      - { name: method, label: Cooked in, widget: select, required: false,
+          options: ['One pot', 'Air fryer', 'Hob', 'Oven', 'Pressure cooker', 'No cooking'] }
+      - { name: time, label: Total time, widget: string,
+          hint: 'As you would say it — "25 min" or "2 hr"' }
+      - { name: serves, label: Serves, widget: number, value_type: int, min: 1 }
+
+      - { name: hero, label: Main photo, widget: image,
+          hint: Wide shot. Used at the top of the page and for link previews. }
+      - { name: card, label: Card photo, widget: image, required: false,
+          hint: 'Optional tall version for the grid. Falls back to the main photo.' }
+      - { name: heroAlt, label: Photo description, widget: string, required: false,
+          hint: One sentence, for blind readers and for Google. }
+
+      - { name: tagList, label: Filter tags, widget: select, multiple: true, required: false,
+          options: [indian, asian, global, airfryer, onepot, veg, quick] }
+      - { name: keywords, label: Extra search words, widget: string, required: false,
+          hint: 'Anything someone might type that is not already on the page. Ingredients are added automatically.' }
+
+      - { name: body, label: The story, widget: markdown, required: false,
+          hint: A few paragraphs before the recipe — why it works, what goes wrong. }
+      - { name: pullquote, label: Pull quote, widget: string, required: false }
+
+      # ---- ingredients, pulled from the library ----
+      - name: ingredientGroups
+        label: Ingredients
+        label_singular: Group
+        widget: list
+        collapsed: false
+        summary: '{{fields.heading}}'
+        fields:
+          - { name: heading, label: Group heading, widget: string, required: false,
+              hint: 'e.g. "For the broth". Leave blank if there is only one list.' }
+          - name: items
+            label: Ingredients
+            label_singular: Ingredient
+            widget: list
+            summary: '{{fields.qty}} {{fields.ingredient}}'
+            fields:
+              - name: ingredient
+                label: Ingredient
+                widget: relation
+                collection: ingredients
+                search_fields: [title, aka]
+                value_field: '{{slug}}'
+                display_fields: [title]
+                hint: Start typing. Add new ones under Ingredients in the sidebar.
+              - { name: qty, label: Amount, widget: string,
+                  hint: '"2 tsp", "1 large", "to taste"' }
+              - { name: note, label: Prep note, widget: string, required: false,
+                  hint: 'e.g. "finely chopped", "halved"' }
+              - { name: nameOverride, label: Show as, widget: string, required: false,
+                  hint: Only if you want this recipe to name it differently. }
+              - { name: image, label: Photo override, widget: image, required: false,
+                  hint: Only if this recipe needs a different photo to the library one. }
+
+      - { name: steps, label: Method steps, widget: list, field: { name: step, label: Step, widget: text } }
+
+      - name: notes
+        label: Notes
+        widget: list
+        required: false
+        summary: '{{fields.title}}'
+        fields:
+          - { name: title, label: Heading, widget: string }
+          - { name: body, label: Note, widget: text }
+
+      - name: products
+        label: Cooked with
+        widget: relation
+        collection: products
+        search_fields: [title]
+        value_field: '{{slug}}'
+        display_fields: [title]
+        multiple: true
+        required: false
+        hint: Kit shown at the bottom of the recipe. Manage under Products.
+
+      - { name: video, label: Instagram reel link, widget: string, required: false }
+      - { name: affiliateNote, label: Affiliate disclosure, widget: text, required: false,
+          hint: Only needed if an ingredient above has an affiliate link. }
+
+      - { name: prepTime, label: Prep time (Google), widget: string, required: false,
+          default: 'PT20M', hint: 'PT20M = 20 minutes. PT1H30M = 1½ hours.' }
+      - { name: cookTime, label: Cook time (Google), widget: string, required: false, default: 'PT40M' }
+      - { name: totalTime, label: Total time (Google), widget: string, required: false, default: 'PT1H' }
+
+  # =============================================================
+  # INGREDIENT LIBRARY
+  # =============================================================
+  - name: ingredients
+    label: Ingredients
+    label_singular: Ingredient
+    folder: src/ingredients
+    create: true
+    slug: '{{slug}}'
+    extension: md
+    format: yaml-frontmatter
+    summary: '{{title}}'
+    sortable_fields: [title, category]
+    view_groups:
+      - label: Category
+        field: category
+    fields:
+      - { name: title, label: Name, widget: string,
+          hint: 'How it should read on a recipe — "Kashmiri chilli powder"' }
+      - { name: image, label: Photo, widget: image, required: false,
+          hint: 'Square, plain background, shot from above. Reused on every recipe that uses it.' }
+      - { name: category, label: Category, widget: select, required: false,
+          options: [Spice, Fresh, Protein, Dairy, Grain, Pantry, Sauce, Herb, Other] }
+      - { name: aka, label: Also known as, widget: string, required: false,
+          hint: 'Other names, so search finds it — "dhania, coriander seed"' }
+      - { name: link, label: Default affiliate link, widget: string, required: false,
+          hint: Used on every recipe unless overridden. }
+      - { name: body, label: Notes, widget: markdown, required: false,
+          hint: For your own reference. Not shown on the site yet. }
+
+  # =============================================================
+  # PRODUCTS / AFFILIATE LIBRARY
+  # =============================================================
+  - name: products
+    label: Products
+    label_singular: Product
+    folder: src/products
+    create: true
+    slug: '{{slug}}'
+    extension: md
+    format: yaml-frontmatter
+    summary: '{{title}}'
+    fields:
+      - { name: title, label: Name, widget: string }
+      - { name: blurb, label: Why we use it, widget: text }
+      - { name: image, label: Photo, widget: image, required: false }
+      - { name: url, label: Affiliate link, widget: string, required: false }
+      - { name: group, label: Section on the Kit page, widget: select,
+          options:
+            - { label: Used almost daily, value: daily }
+            - { label: Worth the drawer space, value: drawer }
+            - { label: Do not show on Kit page, value: hidden } }
+      - { name: body, label: Notes, widget: markdown, required: false }
+
+  # =============================================================
+  # STORIES
+  # =============================================================
+  - name: stories
+    label: Stories
+    label_singular: Story
+    folder: src/stories
+    create: true
+    slug: '{{slug}}'
+    extension: md
+    format: yaml-frontmatter
+    summary: '{{title}}'
+    sortable_fields: [date, title]
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: category, label: Category, widget: select,
+          options: [Pantry, Technique, Basics, Failures, Planning, Kit] }
+      - { name: date, label: Date, widget: datetime, format: 'YYYY-MM-DD',
+          date_format: 'DD MMM YYYY', time_format: false }
+      - { name: readTime, label: Reading time, widget: string, required: false,
+          hint: 'e.g. "6 min read"' }
+      - { name: excerpt, label: Summary, widget: text,
+          hint: One or two sentences. This is what makes someone click. }
+      - { name: hero, label: Photo, widget: image, required: false }
+      - { name: pullquote, label: Pull quote, widget: string, required: false }
+      - { name: body, label: The piece, widget: markdown }
+
+  # =============================================================
+  # SINGLE FILES
+  # =============================================================
+  - name: config
+    label: Site
+    files:
+      - name: reels
+        label: Instagram reels
+        file: src/_data/reels.json
+        fields:
+          - name: items
+            label: Reels
+            label_singular: Reel
+            widget: list
+            summary: '{{fields.caption}}'
+            fields:
+              - { name: url, label: Reel link, widget: string,
+                  hint: 'Open the reel, copy the address — https://www.instagram.com/reel/...' }
+              - { name: caption, label: Caption, widget: string }
+              - { name: thumb, label: Thumbnail, widget: image, required: false,
+                  hint: Portrait screenshot from the reel. }
+
+      - name: settings
+        label: Site settings
+        file: src/_data/site.json
+        fields:
+          - { name: name, label: Site name, widget: string }
+          - { name: tagline, label: Tagline, widget: string }
+          - { name: intro, label: Homepage intro, widget: text }
+          - { name: blurb, label: Footer blurb, widget: text }
+          - { name: url, label: Site URL, widget: string,
+              hint: Used for link previews. Update after you attach a domain. }
+          - { name: instagram, label: Instagram URL, widget: string }
+          - { name: email, label: Contact email, widget: string }
+          - { name: pinterest, label: Pinterest URL, widget: string, required: false }
+          - { name: affiliateNote, label: Affiliate disclosure, widget: text }
+
+      - name: filters
+        label: Recipe filters
+        file: src/_data/filterchips.json
+        fields:
+          - name: filterchips
+            label: Filter buttons
+            widget: list
+            summary: '{{fields.label}}'
+            fields:
+              - { name: slug, label: Tag, widget: string,
+                  hint: Lowercase, no spaces. Must match the tags on recipes. }
+              - { name: label, label: Button text, widget: string }

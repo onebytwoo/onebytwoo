@@ -1,0 +1,155 @@
+---
+layout: base.njk
+---
+{% set ing = ingredientGroups | resolveIngredients(collections.ingredients) %}
+{% set gear = products | resolveProducts(collections.products) %}
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"Recipe",
+  "name":"{{ title | jsonEscape }}",
+  "recipeCuisine":"{{ cuisine }}",
+  "prepTime":"{{ prepTime or 'PT20M' }}",
+  "cookTime":"{{ cookTime or 'PT40M' }}",
+  "totalTime":"{{ totalTime or 'PT1H' }}",
+  "recipeYield":"{{ serves }} servings",
+  "image":"{{ site.url }}{{ hero }}",
+  "recipeIngredient":[
+    {%- set c = joiner(",") -%}
+    {%- for g in ing.groups -%}{%- for i in g.items -%}
+    {{ c() }}"{{ i.qty | jsonEscape }} {{ i.name | jsonEscape }}"
+    {%- endfor -%}{%- endfor -%}
+  ],
+  "recipeInstructions":[
+    {%- set c2 = joiner(",") -%}
+    {%- for s in steps -%}
+    {{ c2() }}{"@type":"HowToStep","text":"{{ s | jsonEscape }}"}
+    {%- endfor -%}
+  ]
+}
+</script>
+
+<section class="hero wrap">
+  <p class="kicker" style="margin-bottom:14px">{{ cuisine }}{% if method %} · {{ method }}{% endif %}</p>
+  <h1 style="font-size:clamp(2.6rem,10vw,6.2rem)">{{ title }}</h1>
+  {% if subtitle %}<p class="sub">{{ subtitle }}</p>{% endif %}
+  <dl class="facts" style="justify-content:center;margin-top:22px;gap:34px">
+    <div><dt>{{ time }}</dt><dd>Prep + cook</dd></div>
+    <div><dt>{{ serves }}</dt><dd>Serves</dd></div>
+  </dl>
+</section>
+
+{% if hero %}
+<section class="wrap" style="padding-bottom:clamp(30px,5vw,50px)">
+  <div class="frame frame--hero">
+    <img src="{{ hero }}" alt="{{ heroAlt or title }}" fetchpriority="high" decoding="async">
+  </div>
+</section>
+{% endif %}
+
+{% if content %}
+<section class="band" style="padding-top:0">
+  <div class="wrap"><div class="article">{{ content | safe }}</div></div>
+</section>
+{% endif %}
+
+<section class="band band--soft" id="cook">
+  <div class="wrap">
+    <div class="cook">
+
+      <div>
+        <div class="cook__head">
+          <h2>Ingredients</h2>
+          {% if ing.photos %}
+          <button class="btn btn--out" id="toggle" type="button" aria-pressed="false">View as list</button>
+          {% endif %}
+        </div>
+
+        {% if ing.photos %}
+        <div id="ingGrid">
+          {% for g in ing.groups %}
+            {% if g.heading %}<p class="kicker" style="margin:{{ '26px' if not loop.first else '0' }} 0 12px">{{ g.heading }}</p>{% endif %}
+            <div class="ing-grid">
+              {% for i in g.items %}
+              <div class="ing">
+                <div class="frame frame--sq{% if not i.image %} frame--empty{% endif %}">
+                  {% if i.image %}<img src="{{ i.image }}" alt="{{ i.name }}" loading="lazy" decoding="async">{% endif %}
+                </div>
+                <p>{{ i.qty }} {{ i.name }}{% if i.note %}, {{ i.note }}{% endif %}</p>
+              </div>
+              {% endfor %}
+            </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <div id="ingList"{% if ing.photos %} hidden{% endif %}>
+          {% for g in ing.groups %}
+            {% if g.heading %}<p class="kicker" style="margin:{{ '26px' if not loop.first else '0' }} 0 10px">{{ g.heading }}</p>{% endif %}
+            <ul class="ing-list">
+              {% for i in g.items %}
+              <li>{% if i.link %}<a href="{{ i.link }}" rel="sponsored nofollow" target="_blank">{{ i.name }}</a>{% else %}{{ i.name }}{% endif %}{% if i.note %}, {{ i.note }}{% endif %} <span>{{ i.qty }}</span></li>
+              {% endfor %}
+            </ul>
+          {% endfor %}
+        </div>
+
+        {% if affiliateNote %}<p class="disc" style="margin-top:24px">{{ affiliateNote }}</p>{% endif %}
+      </div>
+
+      <div>
+        <div class="cook__head">
+          <h2>Method</h2>
+          {% if video %}<a class="btn btn--out" href="{{ video }}" target="_blank" rel="noopener">Watch video</a>{% endif %}
+        </div>
+        <ol class="method">
+          {% for s in steps %}<li><p>{{ s }}</p></li>{% endfor %}
+        </ol>
+        {% if notes.length %}
+        <div class="note-box">
+          {% for n in notes %}<p><strong>{{ n.title }}</strong> {{ n.body }}</p>{% endfor %}
+        </div>
+        {% endif %}
+      </div>
+
+    </div>
+    {% if pullquote %}<p class="pull">{{ pullquote }}</p>{% endif %}
+  </div>
+</section>
+
+{% if gear.length %}
+<section class="band">
+  <div class="wrap">
+    <div class="band__head">
+      <h2>Cooked with</h2>
+      <a class="btn btn--out" href="/kit/">Full kit</a>
+    </div>
+    {% for p in gear %}
+    <div class="kit">
+      <div class="frame frame--sq{% if not p.data.image %} frame--empty{% endif %}">
+        {% if p.data.image %}<img src="{{ p.data.image }}" alt="{{ p.data.title }}" loading="lazy">{% endif %}
+      </div>
+      <div><h3>{{ p.data.title }}</h3><p>{{ p.data.blurb }}</p></div>
+      {% if p.data.url %}<a class="btn btn--sun" href="{{ p.data.url }}" rel="sponsored nofollow" target="_blank">View</a>{% endif %}
+    </div>
+    {% endfor %}
+    <p class="disc" style="margin-top:24px">{{ site.affiliateNote }}</p>
+  </div>
+</section>
+{% endif %}
+
+{% if ing.photos %}
+<script>
+(function(){
+  var b=document.getElementById('toggle'),g=document.getElementById('ingGrid'),l=document.getElementById('ingList');
+  if(!b||!g||!l) return;
+  b.addEventListener('click',function(){
+    var showList=!g.hasAttribute('hidden');
+    g.hidden=showList; l.hidden=!showList;
+    b.textContent=showList?'View as photos':'View as list';
+    b.setAttribute('aria-pressed',showList?'true':'false');
+  });
+})();
+</script>
+{% endif %}

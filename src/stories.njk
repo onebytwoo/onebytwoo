@@ -1,0 +1,28 @@
+---
+layout: base.njk
+title: Stories
+description: Technique, pantry notes, and the things that didn't work.
+permalink: /stories/
+---
+<section class="hero wrap">
+  <h1>Stories</h1>
+  <p class="sub">The longer stuff</p>
+  <p class="tight">Technique, pantry notes, and the recipes that didn't make it.</p>
+</section>
+
+<section class="band band--sun">
+  <div class="wrap">
+    <div class="grid grid--3">
+      {% for s in collections.stories | reverse %}
+      <a class="card" href="{{ s.url }}">
+        <div class="frame frame--wide{% if not s.data.hero %} frame--empty{% endif %}">
+          {% if s.data.hero %}<img src="{{ s.data.hero }}" alt="{{ s.data.title }}" loading="lazy" decoding="async">{% endif %}
+        </div>
+        <span class="meta">{{ s.data.category }}{% if s.data.date %} · {{ s.data.date | readableDate }}{% endif %}</span>
+        <h3>{{ s.data.title }}</h3>
+        <p>{{ s.data.excerpt }}</p>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>

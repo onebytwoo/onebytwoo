@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{ title }} — {{ site.name }}</title>
+<meta name="description" content="{{ description or excerpt or site.blurb }}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400;12..96,75..100,700;12..96,75..100,800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<link rel="stylesheet" href="/styles.css">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#F5F1E6">
+<meta property="og:type" content="website">
+<meta property="og:title" content="{{ title }} — {{ site.name }}">
+<meta property="og:description" content="{{ description or excerpt or site.blurb }}">
+<meta property="og:image" content="{{ site.url }}{{ hero or '/images/og-default.jpg' }}">
+<meta property="og:url" content="{{ site.url }}{{ page.url }}">
+<meta name="twitter:card" content="summary_large_image">
+{% if hero %}<link rel="preload" as="image" href="{{ hero }}" fetchpriority="high">{% endif %}
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="sheet">
+
+<header class="topbar">
+  <div class="in">
+    <a class="dot" href="/" aria-label="{{ site.name }} home">o</a>
+    <nav class="nav" aria-label="Main">
+      <a href="/"{% if page.url == '/' %} aria-current="page"{% endif %}>Home</a>
+      <a href="/recipes/"{% if '/recipes' in page.url %} aria-current="page"{% endif %}>Recipes</a>
+      <a href="/stories/"{% if '/stories' in page.url %} aria-current="page"{% endif %}>Stories</a>
+      <a href="/kit/"{% if '/kit' in page.url %} aria-current="page"{% endif %}>Our Kit</a>
+    </nav>
+    <a class="btn" href="/recipes/">Recipes</a>
+  </div>
+</header>
+
+<main id="main">
+{{ content | safe }}
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__grid">
+      <div>
+        <h2>{{ site.name }}</h2>
+        <p style="max-width:32ch;opacity:.85;font-size:.9rem">{{ site.blurb }}</p>
+      </div>
+      <nav aria-label="Footer">
+        <span class="kicker">Site</span>
+        <a href="/recipes/">Recipes</a>
+        <a href="/stories/">Stories</a>
+        <a href="/kit/">Our Kit</a>
+        <a href="/about/">About</a>
+      </nav>
+      <div>
+        <span class="kicker">Elsewhere</span>
+        <a href="{{ site.instagram }}" target="_blank" rel="noopener">Instagram</a>
+        <a href="mailto:{{ site.email }}">Email</a>
+        {% if site.pinterest %}<a href="{{ site.pinterest }}" target="_blank" rel="noopener">Pinterest</a>{% else %}<a href="#" style="opacity:.5">Pinterest — soon</a>{% endif %}
+      </div>
+    </div>
+    <div class="foot__base">
+      <span>© 2026 {{ site.name }}</span>
+      <span>Some links are affiliate links</span>
+    </div>
+  </div>
+</footer>
+
+</div>
+</body>
+</html>

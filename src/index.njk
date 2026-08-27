@@ -1,0 +1,110 @@
+---
+layout: base.njk
+title: One dish, one story, at a time
+permalink: /
+---
+{% set featured = collections.recipes | reverse | first %}
+
+<section class="hero wrap">
+  <h1>{{ site.name }}</h1>
+  <p class="sub">{{ site.tagline }}</p>
+  <p class="tight">{{ site.intro }}</p>
+  <p class="acts">
+    <a class="btn" href="/recipes/">Browse recipes</a>
+    <a class="btn btn--out" href="/stories/">Read the stories</a>
+  </p>
+</section>
+
+{% if featured and featured.data.hero %}
+<section class="wrap" style="padding-bottom:clamp(30px,5vw,52px)">
+  <a class="frame frame--hero" href="{{ featured.url }}" aria-label="Read the {{ featured.data.title }} recipe">
+    <img src="{{ featured.data.hero }}" alt="{{ featured.data.heroAlt or featured.data.title }}" fetchpriority="high" decoding="async">
+  </a>
+</section>
+{% endif %}
+
+{% if collections.recipes.length %}
+<section class="band band--sun">
+  <div class="wrap">
+    <div class="band__head">
+      <h2>Cooked this week</h2>
+      <a class="btn btn--out" href="/recipes/">All recipes</a>
+    </div>
+    <div class="rail rail--recipe" role="list">
+      {% for r in collections.recipes | reverse %}
+      <a class="card" role="listitem" href="{{ r.url }}">
+        <div class="frame frame--tall{% if not (r.data.card or r.data.hero) %} frame--empty{% endif %}">
+          {% if r.data.card or r.data.hero %}<img src="{{ r.data.card or r.data.hero }}" alt="{{ r.data.heroAlt or r.data.title }}" loading="lazy" decoding="async">{% endif %}
+        </div>
+        <span class="meta">{{ r.data.cuisine }}</span>
+        <h3>{{ r.data.title }}</h3>
+        <dl class="facts"><div><dt>{{ r.data.time }}</dt><dd>Prep + cook</dd></div><div><dt>{{ r.data.serves }}</dt><dd>Serves</dd></div></dl>
+      </a>
+      {% endfor %}
+    </div>
+    <p class="rail__note">Scroll sideways for more</p>
+  </div>
+</section>
+{% endif %}
+
+{% if reels.items.length %}
+<section class="band band--ink">
+  <div class="wrap">
+    <div class="band__head">
+      <h2>From the reels</h2>
+      <a class="btn btn--sun" href="{{ site.instagram }}" target="_blank" rel="noopener">Follow us</a>
+    </div>
+    <div class="rail rail--reel" role="list">
+      {% for reel in reels.items %}
+      <a class="reel" role="listitem" href="{{ reel.url }}" target="_blank" rel="noopener">
+        <div class="reel__frame">
+          {% if reel.thumb %}<img src="{{ reel.thumb }}" alt="{{ reel.caption }}" loading="lazy" decoding="async">{% endif %}
+          <span class="reel__play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span>
+        </div>
+        <p class="reel__cap">{{ reel.caption }}<span class="m">Watch on Instagram</span></p>
+      </a>
+      {% endfor %}
+    </div>
+    <p class="rail__note">Tap any reel to watch it on Instagram</p>
+  </div>
+</section>
+{% endif %}
+
+{% if collections.stories.length %}
+<section class="band">
+  <div class="wrap">
+    <div class="band__head">
+      <h2>Stories</h2>
+      <a class="btn btn--out" href="/stories/">Read all</a>
+    </div>
+    <div class="grid grid--2">
+      {% for s in collections.stories | reverse | limit(2) %}
+      <a class="card" href="{{ s.url }}">
+        <div class="frame frame--wide{% if not s.data.hero %} frame--empty{% endif %}">
+          {% if s.data.hero %}<img src="{{ s.data.hero }}" alt="{{ s.data.title }}" loading="lazy" decoding="async">{% endif %}
+        </div>
+        <span class="meta">{{ s.data.category }}</span>
+        <h3>{{ s.data.title }}</h3>
+        <p>{{ s.data.excerpt }}</p>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="band band--ink">
+  <div class="wrap">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:38px;align-items:center">
+      <h2>One email,<br>every week</h2>
+      <div>
+        <p class="lede">The week's cooking in one place. Coming soon — put your name down now.</p>
+        <form class="signup" onsubmit="event.preventDefault();this.reset();alert('Connect this form to Buttondown, Beehiiv or Mailchimp.');">
+          <label class="skip" for="email">Email address</label>
+          <input id="email" type="email" placeholder="you@email.com" required>
+          <button class="btn btn--sun" type="submit">Sign up</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
