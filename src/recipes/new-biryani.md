@@ -20,6 +20,26 @@ ingredientGroups:
         note: ''
         nameOverride: ''
         image: /images/pasted-image-1788448305191.png
+      - ingredient: black-peppercorns
+        qty: '3'
+        note: ''
+        nameOverride: ''
+        image: ''
+      - ingredient: ginger
+        qty: '232'
+        note: ''
+        nameOverride: ''
+        image: ''
+      - ingredient: chilli-oil
+        qty: '1'
+        note: ''
+        nameOverride: ''
+        image: ''
+      - ingredient: cinnamon-stick
+        qty: '12'
+        note: ''
+        nameOverride: ''
+        image: ''
 steps:
   - test
 notes: []
